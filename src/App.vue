@@ -4,8 +4,11 @@
       <v-app-bar-nav-icon
         @click.stop="nav_drawer = !nav_drawer"
       ></v-app-bar-nav-icon>
+      <v-toolbar-title>Task Tools</v-toolbar-title>
       <v-spacer></v-spacer>
-      <span>Task Tools</span>
+      <v-btn icon plain :to="{ name: 'home' }">
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-navigation-drawer app v-model="nav_drawer" temporary>
       <v-list nav>
