@@ -7,17 +7,12 @@
           <v-tooltip left>
             <template v-slot:activator="{ on }">
               <v-list-item-icon v-on="on">
-                <v-badge :color="mailVerified ? 'success' : 'warning'" dot>
+                <v-badge :color="mailIsVerified ? 'success' : 'warning'" dot>
                   <v-icon>mdi-email</v-icon>
                 </v-badge>
               </v-list-item-icon>
             </template>
-            {{
-              mailVerified
-                ? `verified at: ` +
-                  new Date(user.email_verified_at).toUTCString()
-                : `not verified`
-            }}
+            {{ mailVerifiedText }}
           </v-tooltip>
           <v-list-item-content>
             <v-list-item-title>Email</v-list-item-title>
@@ -90,8 +85,13 @@ export default defineComponent({
     user: { type: Object as PropType<UserData>, required: true },
   },
   computed: {
-    mailVerified(): boolean {
+    mailIsVerified(): boolean {
       return this.user.email_verified_at !== null;
+    },
+    mailVerifiedText(): string {
+      return typeof this.user.email_verified_at === "string"
+        ? `verified at: ` + new Date(this.user.email_verified_at).toUTCString()
+        : `not verified`;
     },
   },
 });
