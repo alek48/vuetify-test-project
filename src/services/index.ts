@@ -34,3 +34,10 @@ export interface NewUser {
   phone: string;
   password: string;
 }
+
+export interface NewTask {
+  task: string;
+  dead_line: string;
+  user_id: number;
+  specialization_id: number;
+}

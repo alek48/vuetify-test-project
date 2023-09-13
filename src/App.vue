@@ -45,7 +45,7 @@
             <v-list-item-title>List of tasks</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link exact :to="{ name: 'new_task' }">
           <v-list-item-icon>
             <v-icon>mdi-plus</v-icon>
           </v-list-item-icon>

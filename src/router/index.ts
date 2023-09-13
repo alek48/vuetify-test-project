@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import UsersView from "../views/UsersView.vue";
 import TasksView from "../views/TasksView.vue";
 import NewUserView from "../views/NewUserView.vue";
+import NewTaskView from "@/views/NewTaskView.vue";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes: Array<RouteConfig> = [
     path: "/tasks",
     name: "tasks",
     component: TasksView,
+  },
+  {
+    path: "/tasks/new",
+    name: "new_task",
+    component: NewTaskView,
   },
 ];
 
