@@ -16,7 +16,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-subheader>Users</v-subheader>
-        <v-list-item link :to="{ name: 'users' }">
+        <v-list-item link exact :to="{ name: 'users' }">
           <v-list-item-icon>
             <v-icon>mdi-view-list</v-icon>
           </v-list-item-icon>
@@ -24,7 +24,7 @@
             <v-list-item-title>List of users</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link :to="{ name: 'new_user' }">
+        <v-list-item link exact :to="{ name: 'new_user' }">
           <v-list-item-icon>
             <v-icon>mdi-plus</v-icon>
           </v-list-item-icon>
@@ -34,7 +34,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-subheader>Tasks</v-subheader>
-        <v-list-item link :to="{ name: 'tasks' }">
+        <v-list-item link exact :to="{ name: 'tasks' }">
           <v-list-item-icon>
             <v-icon>mdi-view-list</v-icon>
           </v-list-item-icon>
