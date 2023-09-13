@@ -37,7 +37,8 @@ export interface NewUser {
 
 export interface NewTask {
   task: string;
-  dead_line: string;
+  dead_line_date: string;
+  dead_line_time: string;
   user_id: number;
   specialization_id: number;
 }

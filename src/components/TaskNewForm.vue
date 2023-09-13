@@ -12,6 +12,31 @@
                 :rules="requiredField"
                 required
               ></v-text-field>
+              <v-menu
+                v-model="showDeadlineDatepicker"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attr }">
+                  <v-text-field
+                    v-model="newTask.dead_line_date"
+                    label="Deadline date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
+                    v-bind="attr"
+                  >
+                  </v-text-field>
+                </template>
+                <v-date-picker
+                  color="accent"
+                  v-model="newTask.dead_line_date"
+                  no-title
+                  scrollable
+                ></v-date-picker>
+              </v-menu>
+
               <v-input>dead_line - datetime</v-input>
               <v-input>user_id - number</v-input>
               <v-input>specialization_id - number</v-input>
@@ -39,6 +64,7 @@ export default defineComponent({
     newTask: {} as NewTask,
     requiredField: [(v: string) => !!v || "This field is required"],
     loading: false,
+    showDeadlineDatepicker: false,
   }),
   methods: {
     async submitForm() {
