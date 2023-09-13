@@ -1,13 +1,17 @@
 <template>
-  <v-data-table :loading="loading" :headers="headers" :items="tasks">
-  </v-data-table>
+  <span>
+    <AlertBox :v_if="loading_fail" :alert_text="alert_text"></AlertBox>
+    <v-data-table :loading="loading" :headers="headers" :items="tasks">
+    </v-data-table>
+  </span>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import api from "../services/index";
+import AlertBox from "./AlertBox.vue";
 
-export default Vue.extend({
+export default defineComponent({
   data: () => ({
     loading: true,
     headers: [
@@ -17,18 +21,29 @@ export default Vue.extend({
       { text: "Status", value: "status" },
     ],
     tasks: [],
+    loading_fail: false,
+    alert_text: "",
   }),
   async created() {
     this.fetchTasks();
   },
   methods: {
-    fetchTasks: async function () {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const vm = this;
-      vm.loading = true;
-      api.getTasks().then((response) => (this.tasks = response.data));
-      vm.loading = false;
+    async fetchTasks() {
+      this.loading = true;
+      api
+        .getTasks()
+        .then((response) => {
+          this.tasks = response.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading_fail = true;
+          this.loading = false;
+          this.alert_text = err.message + ": Couldn't load data";
+          console.log(err.code);
+        });
     },
   },
+  components: { AlertBox },
 });
 </script>

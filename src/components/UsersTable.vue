@@ -1,5 +1,6 @@
 <template>
   <span>
+    <AlertBox v-if="loading_fail" :alert_text="alert_text"> </AlertBox>
     <v-data-table
       disable-pagination
       disable-filtering
@@ -19,16 +20,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import UserDetails from "./UserDetails.vue";
 import api from "../services";
+import AlertBox from "./AlertBox.vue";
+import { UserData } from "@/services";
 
-export default Vue.extend({
+export default defineComponent({
   data: () => ({
-    users: [],
+    users: [] as UserData[],
     pages: 0,
     current_page: 1,
-    focused_user: undefined,
+    focused_user: {} as UserData,
     loading: true,
     headers: [
       { text: "id", value: "id" },
@@ -38,27 +41,30 @@ export default Vue.extend({
       { text: "status", value: "status" },
     ],
     detailsVisible: false,
+    loading_fail: false,
+    alert_text: "",
   }),
   async created() {
     this.fetchUsers();
   },
   methods: {
     async fetchUsers() {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const vm = this;
-      vm.loading = true;
+      this.loading = true;
       api
-        .getUsersPage(vm.current_page)
+        .getUsersPage(this.current_page)
         .then((response) => {
-          vm.users = response.data.data;
-          vm.loading = false;
-          vm.pages = response.data.last_page;
+          this.users = response.data.data;
+          this.loading = false;
+          this.pages = response.data.last_page;
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.loading_fail = true;
+          this.loading = false;
+          this.alert_text = err.message + ": Couldn't load data";
+          console.log(err.code);
+        });
     },
-    showDetails(_: any, item: any) {
-      console.log(item.item.id);
-      console.log(typeof item);
+    showDetails(_: unknown, item: { item: UserData }) {
       this.detailsVisible = true;
       this.focused_user = item.item;
     },
@@ -68,6 +74,6 @@ export default Vue.extend({
       this.fetchUsers();
     },
   },
-  components: { UserDetails },
+  components: { UserDetails, AlertBox },
 });
 </script>
