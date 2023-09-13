@@ -1,6 +1,6 @@
 <template>
   <span>
-    <AlertBox :v_if="loading_fail" :alert_text="alert_text"></AlertBox>
+    <AlertBox v-if="loading_fail" :alert_text="alert_text"></AlertBox>
     <v-data-table :loading="loading" :headers="headers" :items="tasks">
     </v-data-table>
   </span>
