@@ -11,6 +11,9 @@ export default {
   getTasks: async function () {
     return await axios.get("/api/tasks");
   },
+  postNewUser: async function (data: NewUser) {
+    return await axios.post("/api/users", data);
+  },
 };
 
 export interface UserData {
@@ -23,4 +26,11 @@ export interface UserData {
   status: string;
   admin: string;
   deleted_at: string;
+}
+
+export interface NewUser {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
 }
