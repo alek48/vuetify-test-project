@@ -1,16 +1,14 @@
 <template>
-  <hello-world />
+  <v-container> Home </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "../components/HelloWorld.vue";
 
 export default Vue.extend({
   name: "HomeView",
-
-  components: {
-    HelloWorld,
+  mounted() {
+    document.title = "Task Manager - Home";
   },
 });
 </script>
