@@ -6,7 +6,7 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Task Tools</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon plain :to="{ name: 'home' }">
+      <v-btn icon plain :to="{ name: 'home' }" @click="testToast">
         <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-app-bar>
@@ -58,6 +58,10 @@
 
     <v-main>
       <router-view />
+      <v-snackbar v-bind="$store.state.toast.snackbarProps">
+        <v-icon>{{ $store.state.toast.icon }}</v-icon>
+        {{ $store.state.toast.message }}
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
