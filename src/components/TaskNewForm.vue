@@ -1,6 +1,6 @@
 <template>
   <v-card :loading="loading" :disabled="loading">
-    <v-card-title> Task </v-card-title>
+    <v-card-title> Task - {{ newTask.task }} </v-card-title>
     <v-card-text>
       <v-form v-model="valid" ref="form" lazy-validation>
         <v-container>
@@ -8,38 +8,83 @@
             <v-col cols="auto">
               <v-text-field
                 v-model="newTask.task"
-                label="Name"
+                label="Task name"
                 :rules="requiredField"
                 required
               ></v-text-field>
-              <v-menu
-                v-model="showDeadlineDatepicker"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attr }">
-                  <v-text-field
+              <div class="d-inline-flex">
+                <v-menu
+                  ref="time_menu"
+                  v-model="showDeadlineDatepicker"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attr }">
+                    <v-text-field
+                      v-model="newTask.dead_line_date"
+                      label="Deadline date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-on="on"
+                      v-bind="attr"
+                      :rules="requiredField"
+                      required
+                    >
+                    </v-text-field>
+                  </template>
+                  <v-date-picker
+                    color="accent"
                     v-model="newTask.dead_line_date"
-                    label="Deadline date"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-on="on"
-                    v-bind="attr"
-                  >
-                  </v-text-field>
-                </template>
-                <v-date-picker
-                  color="accent"
-                  v-model="newTask.dead_line_date"
-                  no-title
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
-
-              <v-input>dead_line - datetime</v-input>
-              <v-input>user_id - number</v-input>
-              <v-input>specialization_id - number</v-input>
+                    no-title
+                    scrollable
+                  ></v-date-picker>
+                </v-menu>
+                <v-menu
+                  v-model="showDeadlineTimepicker"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                  :close-on-content-click="false"
+                >
+                  <template v-slot:activator="{ on, attr }">
+                    <v-text-field
+                      v-model="newTask.dead_line_time"
+                      label="Deadline time"
+                      prepend-icon="mdi-clock"
+                      readonly
+                      v-on="on"
+                      v-bind="attr"
+                      :rules="requiredField"
+                      required
+                    >
+                    </v-text-field>
+                  </template>
+                  <v-time-picker
+                    color="accent"
+                    v-model="newTask.dead_line_time"
+                    no-title
+                    format="24hr"
+                    v-if="showDeadlineTimepicker"
+                    @click:minute="showDeadlineTimepicker = false"
+                    transition="scale-transition"
+                  ></v-time-picker>
+                </v-menu>
+              </div>
+              <v-text-field
+                v-model="newTask.user_id"
+                label="User ID"
+                :rules="requiredField"
+                required
+                type="number"
+              ></v-text-field>
+              <v-text-field
+                v-model="newTask.specialization_id"
+                label="Specialization ID"
+                :rules="requiredField"
+                required
+                type="number"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -61,22 +106,28 @@ import api, { NewTask } from "@/services";
 export default defineComponent({
   data: () => ({
     valid: true,
-    newTask: {} as NewTask,
+    newTask: new NewTask(),
     requiredField: [(v: string) => !!v || "This field is required"],
     loading: false,
     showDeadlineDatepicker: false,
+    showDeadlineTimepicker: false,
   }),
   methods: {
     async submitForm() {
-      this.$refs.form.validate(); // no idea how to fix linting here
-      if (this.valid) {
+      console.log(this.newTask);
+      var form = this.$refs.form as HTMLFormElement;
+      if (form.validate()) {
         this.loading = true;
-        // TODO
-        this.loading = false;
+        api.postNewTask(this.newTask).then(() => {
+          this.loading = false;
+          form.reset();
+        });
       }
     },
     clearForm() {
-      this.$refs.form.reset(); // no idea how to fix linting here
+      console.log(this.newTask);
+      var form = this.$refs.form as HTMLFormElement;
+      form.reset();
     },
   },
 });

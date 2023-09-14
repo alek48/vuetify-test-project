@@ -14,6 +14,10 @@ export default {
   postNewUser: async function (data: NewUser) {
     return await axios.post("/api/users", data);
   },
+  postNewTask: async function (data: NewTask) {
+    console.log(data);
+    await new Promise((resolve) => setTimeout(resolve, 5000)).then();
+  },
 };
 
 export interface UserData {
@@ -35,10 +39,10 @@ export interface NewUser {
   password: string;
 }
 
-export interface NewTask {
-  task: string;
-  dead_line_date: string;
-  dead_line_time: string;
-  user_id: number;
-  specialization_id: number;
+export class NewTask {
+  task = "";
+  dead_line_date = "";
+  dead_line_time = "";
+  user_id = 0;
+  specialization_id = 0;
 }
