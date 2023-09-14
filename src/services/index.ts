@@ -20,10 +20,11 @@ export default {
     const payload = {
       task: data.task,
       dead_line: dead_line,
-      user_id: data.user_id,
-      specialization_id: data.specialization_id,
+      user_id: Number(data.user_id),
+      specialization_id: Number(data.specialization_id),
     };
     const requestdata = JSON.stringify(payload);
+    console.log(requestdata);
     return await axios.post("/api/tasks", requestdata);
   },
 };
@@ -51,6 +52,6 @@ export class NewTask {
   task = "";
   dead_line_date = "";
   dead_line_time = "";
-  user_id = 0;
-  specialization_id = 0;
+  user_id = "";
+  specialization_id = "";
 }

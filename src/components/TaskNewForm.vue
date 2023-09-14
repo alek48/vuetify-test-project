@@ -11,7 +11,7 @@
                 <v-text-field
                   v-model="newTask.task"
                   label="Task name"
-                  :rules="requiredField"
+                  :rules="[requiredField]"
                   required
                 ></v-text-field>
                 <div class="d-inline-flex">
@@ -30,7 +30,7 @@
                         readonly
                         v-on="on"
                         v-bind="attr"
-                        :rules="requiredField"
+                        :rules="[requiredField]"
                         required
                       >
                       </v-text-field>
@@ -57,7 +57,7 @@
                         readonly
                         v-on="on"
                         v-bind="attr"
-                        :rules="requiredField"
+                        :rules="[requiredField]"
                         required
                       >
                       </v-text-field>
@@ -76,13 +76,13 @@
                 <v-text-field
                   v-model="newTask.user_id"
                   label="User ID"
-                  :rules="requiredField"
+                  :rules="[validNumber]"
                   type="number"
                 ></v-text-field>
                 <v-text-field
                   v-model="newTask.specialization_id"
                   label="Specialization ID"
-                  :rules="requiredField"
+                  :rules="[validNumber]"
                   type="number"
                 ></v-text-field>
               </v-col>
@@ -111,7 +111,9 @@ export default defineComponent({
   data: () => ({
     valid: true,
     newTask: new NewTask(),
-    requiredField: [(v: string) => !!v || "This field is required"],
+    requiredField: (v: string) => (v.length ? true : "This field is required"),
+    validNumber: (v: string) =>
+      v.length && +v % 1 == 0 ? true : "non-negative integer required",
     loading: false,
     showDeadlineDatepicker: false,
     showDeadlineTimepicker: false,
@@ -138,7 +140,6 @@ export default defineComponent({
       }
     },
     clearForm() {
-      console.log(this.newTask);
       var form = this.$refs.form as HTMLFormElement;
       form.reset();
     },
