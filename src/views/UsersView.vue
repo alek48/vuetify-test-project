@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+
 import UsersTable from "../components/UsersTable.vue";
 
 export default Vue.extend({

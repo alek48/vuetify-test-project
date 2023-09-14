@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import TaskNewForm from "@/components/TaskNewForm.vue";
 import { defineComponent } from "vue";
+
+import TaskNewForm from "@/components/TaskNewForm.vue";
 
 export default defineComponent({ components: { TaskNewForm } });
 </script>

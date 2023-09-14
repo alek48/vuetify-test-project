@@ -49,7 +49,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+
 import api, { NewUser } from "@/services";
+
 import AlertBox from "./AlertBox.vue";
 
 export default defineComponent({

@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+
 import TasksTable from "../components/TasksTable.vue";
 
 export default Vue.extend({

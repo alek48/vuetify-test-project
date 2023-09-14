@@ -77,7 +77,8 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+
 import { UserData } from "@/services";
 
 export default defineComponent({

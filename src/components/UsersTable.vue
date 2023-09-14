@@ -21,10 +21,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import UserDetails from "./UserDetails.vue";
+
+import { UserData } from "@/services";
+
 import api from "../services";
 import AlertBox from "./AlertBox.vue";
-import { UserData } from "@/services";
+import UserDetails from "./UserDetails.vue";
 
 export default defineComponent({
   data: () => ({

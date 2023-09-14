@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import UserNewForm from "@/components/UserNewForm.vue";
 import { defineComponent } from "vue";
+
+import UserNewForm from "@/components/UserNewForm.vue";
 
 export default defineComponent({ components: { UserNewForm } });
 </script>
