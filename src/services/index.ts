@@ -12,6 +12,7 @@ export default {
     return await axios.get("/api/tasks");
   },
   postNewUser: async function (data: NewUser) {
+    console.log(data);
     return await axios.post("/api/users", data);
   },
 };
@@ -28,9 +29,9 @@ export interface UserData {
   deleted_at: string;
 }
 
-export interface NewUser {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
+export class NewUser {
+  name = "";
+  email = "";
+  phone = "";
+  password = "";
 }

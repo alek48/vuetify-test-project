@@ -55,7 +55,7 @@ import AlertBox from "./AlertBox.vue";
 export default defineComponent({
   data: () => ({
     valid: true,
-    newUser: {} as NewUser,
+    newUser: new NewUser(),
     requiredField: [(v: string) => !!v || "This field is required"],
     loading: false,
     loading_fail: false,
@@ -63,7 +63,8 @@ export default defineComponent({
   }),
   methods: {
     async submitForm() {
-      if (this.$refs.form.validate()) {
+      var form = this.$refs.form as HTMLFormElement;
+      if (form.validate()) {
         // no idea how to fix linting here
         this.loading = true;
         this.loading_fail = false;
@@ -72,7 +73,7 @@ export default defineComponent({
           .then((response) => {
             console.log(response);
             this.loading = false;
-            this.$refs.form.reset(); // no idea how to fix linting here
+            form.reset(); // no idea how to fix linting here
           })
           .catch((err) => {
             console.log(err);
@@ -83,7 +84,8 @@ export default defineComponent({
       }
     },
     clearForm() {
-      this.$refs.form.reset(); // no idea how to fix linting here
+      var form = this.$refs.form as HTMLFormElement;
+      form.reset(); // no idea how to fix linting here
     },
   },
   components: { AlertBox },
