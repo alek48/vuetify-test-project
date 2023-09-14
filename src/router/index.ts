@@ -1,10 +1,10 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import UsersView from "../views/UsersView.vue";
-import TasksView from "../views/TasksView.vue";
-import NewUserView from "../views/NewUserView.vue";
-import NewTaskView from "@/views/NewTaskView.vue";
+const HomeView = () => import("../views/HomeView.vue");
+const UsersView = () => import("../views/UsersView.vue");
+const TasksView = () => import("../views/TasksView.vue");
+const NewUserView = () => import("../views/NewUserView.vue");
+const NewTaskView = () => import("@/views/NewTaskView.vue");
 
 Vue.use(VueRouter);
 
