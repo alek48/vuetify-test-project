@@ -6,7 +6,16 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Task Tools</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon plain :to="{ name: 'home' }" @click="testToast">
+      <span v-if="$store.state.logged_in">
+        Welcome, {{ $store.state.username }}
+      </span>
+      <v-btn v-if="$store.state.logged_in" @click="logOut" icon>
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+      <v-btn v-else :to="{ name: 'login' }" icon>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+      <v-btn :to="{ name: 'home' }" icon>
         <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-app-bar>
@@ -68,6 +77,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { Store } from "vuex";
 
 export default Vue.extend({
   name: "App",
@@ -75,6 +85,24 @@ export default Vue.extend({
   data: () => ({
     nav_drawer: false,
   }),
-  methods: {},
+  methods: {
+    logOut() {
+      this.$store.dispatch("logOut", {});
+      this.$store.dispatch("toast/showToast", {
+        message: "Succesfully logged out",
+        icon: "mdi-logout",
+        color: "info",
+      });
+      if (this.$route.name !== "home") {
+        this.$router.push({ name: "home" });
+      }
+    },
+  },
 });
 </script>
+
+<style scoped>
+.v-btn--active::before {
+  opacity: 0;
+}
+</style>

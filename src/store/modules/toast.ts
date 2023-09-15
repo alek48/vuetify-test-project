@@ -16,7 +16,7 @@ export default {
     SET_TOAST(state: any, payload: any) {
       state.message = payload.message || "Toast text not set";
       state.snackbarProps.color = payload.color || "success";
-      state.snackbarProps.icon = payload.icon || "mdi-check";
+      state.icon = payload.icon || "mdi-check";
       state.snackbarProps.value = true;
       clearTimeout(state.timeout);
       state.lastTimeout = setTimeout(() => {

@@ -5,6 +5,7 @@ const UsersView = () => import("../views/UsersView.vue");
 const TasksView = () => import("../views/TasksView.vue");
 const NewUserView = () => import("../views/NewUserView.vue");
 const NewTaskView = () => import("@/views/NewTaskView.vue");
+const LoginView = () => import("@/views/LoginView.vue");
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes: Array<RouteConfig> = [
     path: "/tasks/new",
     name: "new_task",
     component: NewTaskView,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
   },
 ];
 

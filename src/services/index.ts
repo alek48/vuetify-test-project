@@ -30,6 +30,17 @@ export default {
     console.log(payload);
     return await axios.post("/api/tasks", payload);
   },
+  postLogin: async function (data: LoginData) {
+    return await axios.post("/api/login", data);
+  },
+  postRegister: async function (data: RegisterData) {
+    const payload = new FormData();
+    payload.append("name", data.name);
+    payload.append("email", data.email);
+    payload.append("password", data.password);
+    payload.append("c_password", data.c_password);
+    return await axios.post("/api/register", payload);
+  },
 };
 
 export interface UserData {
@@ -67,4 +78,16 @@ export class NewTask {
   dead_line_time = "";
   user_id = "";
   specialization_id = "";
+}
+
+export class LoginData {
+  email = "";
+  password = "";
+}
+
+export class RegisterData {
+  name = "";
+  email = "";
+  password = "";
+  c_password = "";
 }
