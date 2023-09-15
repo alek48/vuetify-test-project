@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :loading="loading">
     <v-card-title>{{ user.name }}</v-card-title>
     <v-card-text two-line>
       <v-list>
@@ -77,13 +77,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from "vue";
 
-import { UserData } from "@/services";
+import api, { UserData } from "@/services";
 
 export default defineComponent({
   props: {
-    user: { type: Object as PropType<UserData>, required: true },
+    user_id: { type: Number, required: true },
+  },
+  data: () => ({
+    user: new UserData(),
+    loading: false,
+  }),
+  created() {
+    this.fetchUser(this.user_id);
   },
   computed: {
     mailIsVerified(): boolean {
@@ -93,6 +100,29 @@ export default defineComponent({
       return typeof this.user.email_verified_at === "string"
         ? `verified at: ` + new Date(this.user.email_verified_at).toUTCString()
         : `not verified`;
+    },
+  },
+  methods: {
+    async fetchUser(id: number) {
+      this.loading = true;
+      await api.getUserById(id).then((response) => {
+        this.user.admin = response.data.admin;
+        this.user.created_at = response.data.created_at;
+        this.user.deleted_at = response.data.deleted_at;
+        this.user.email = response.data.email;
+        this.user.email_verified_at = response.data.email_verified_at;
+        this.user.name = response.data.name;
+        this.user.phone = response.data.phone;
+        this.user.status = response.data.status;
+        this.user.updated_at = response.data.updated_at;
+      });
+      this.loading = false;
+    },
+  },
+  watch: {
+    user_id(to) {
+      this.user = new UserData();
+      this.fetchUser(to);
     },
   },
 });

@@ -8,6 +8,9 @@ export default {
   getUsersPage: async function (page: number) {
     return await axios.get("/api/users?page=" + page);
   },
+  getUserById: async function (id: number) {
+    return await axios.get("/api/users/" + id);
+  },
   getTasks: async function () {
     return await axios.get("/api/tasks");
   },
@@ -27,7 +30,6 @@ export default {
       user_id: Number(data.user_id),
       specialization_id: Number(data.specialization_id),
     };
-    console.log(payload);
     return await axios.post("/api/tasks", payload);
   },
   postLogin: async function (data: LoginData) {
@@ -43,16 +45,17 @@ export default {
   },
 };
 
-export interface UserData {
-  name: string;
-  email: string;
-  email_verified_at: [string | null];
-  created_at: string;
-  updated_at: string;
-  phone: string;
-  status: string;
-  admin: string;
-  deleted_at: string;
+export class UserData {
+  id = -1;
+  name = "";
+  email = "";
+  email_verified_at: string | null = null;
+  created_at = "";
+  updated_at = "";
+  phone = "";
+  status = "";
+  admin = "";
+  deleted_at = "";
 }
 
 export class NewUser {

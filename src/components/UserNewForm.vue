@@ -73,7 +73,6 @@ export default defineComponent({
         api
           .postNewUser(this.newUser)
           .then((response) => {
-            console.log(response);
             this.loading = false;
             form.reset(); // no idea how to fix linting here
             this.$store.dispatch("toast/showToast", {
@@ -81,7 +80,6 @@ export default defineComponent({
             });
           })
           .catch((err) => {
-            console.log(err);
             this.loading = false;
             this.loading_fail = true;
             this.alert_text = err.message + ": Adding user failed";

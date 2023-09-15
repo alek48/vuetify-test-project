@@ -126,7 +126,6 @@ export default defineComponent({
         api
           .postLogin(this.loginData)
           .then((response) => {
-            console.log(response);
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
@@ -138,7 +137,6 @@ export default defineComponent({
             this.$router.push({ name: "home" });
           })
           .catch((err) => {
-            console.log(err);
             this.loading = false;
             this.loading_fail = true;
             this.alert_text = err.message + ": Failed to log in";
@@ -153,18 +151,15 @@ export default defineComponent({
         api
           .postRegister(this.registerData)
           .then((response) => {
-            console.log(response);
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
               message: "Registered successfully",
             });
-            console.log(response);
             this.$store.dispatch("logIn", response.data.data);
             this.$router.push({ name: "home" });
           })
           .catch((err) => {
-            console.log(err);
             this.loading = false;
             this.loading_fail = true;
             this.alert_text = err.message + ": Failed to register";

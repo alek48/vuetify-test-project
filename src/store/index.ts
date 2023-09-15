@@ -10,6 +10,7 @@ export default new Vuex.Store({
     userToken: "",
     logged_in: false,
     username: "",
+    userId: -1,
   }),
   getters: {},
   mutations: {
@@ -17,10 +18,12 @@ export default new Vuex.Store({
       state.userToken = payload.token;
       state.username = payload.name;
       state.logged_in = true;
+      state.userId = payload.id;
     },
     LOG_OUT(state: any, payload: any) {
       state.userToken = "";
       state.username = "";
+      state.userId = -1;
       state.logged_in = false;
     },
   },

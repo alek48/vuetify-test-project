@@ -14,7 +14,7 @@
     </v-data-table>
     <v-pagination :length="pages" v-model="current_page"> </v-pagination>
     <v-dialog v-model="detailsVisible" max-width="60%">
-      <UserDetails :user="focused_user" />
+      <UserDetails :user_id="focused_user" />
     </v-dialog>
   </span>
 </template>
@@ -33,7 +33,7 @@ export default defineComponent({
     users: [] as UserData[],
     pages: 0,
     current_page: 1,
-    focused_user: {} as UserData,
+    focused_user: -1,
     loading: true,
     headers: [
       { text: "id", value: "id" },
@@ -63,12 +63,11 @@ export default defineComponent({
           this.loading_fail = true;
           this.loading = false;
           this.alert_text = err.message + ": Couldn't load data";
-          console.log(err.code);
         });
     },
     showDetails(_: unknown, item: { item: UserData }) {
       this.detailsVisible = true;
-      this.focused_user = item.item;
+      this.focused_user = Number(item.item.id);
     },
   },
   watch: {
