@@ -20,8 +20,16 @@ export default {
     return await axios.post("/api/users", payload);
   },
   postNewTask: async function (data: NewTask) {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 5000)).then();
+    const dead_line = data.dead_line_date + " " + data.dead_line_time;
+    const payload = {
+      task: data.task,
+      dead_line: dead_line,
+      user_id: Number(data.user_id),
+      specialization_id: Number(data.specialization_id),
+    };
+    const requestdata = JSON.stringify(payload);
+    console.log(requestdata);
+    return await axios.post("/api/tasks", requestdata);
   },
 };
 
@@ -48,6 +56,6 @@ export class NewTask {
   task = "";
   dead_line_date = "";
   dead_line_time = "";
-  user_id = 0;
-  specialization_id = 0;
+  user_id = "";
+  specialization_id = "";
 }
