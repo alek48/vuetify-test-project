@@ -111,9 +111,9 @@ export default defineComponent({
   data: () => ({
     valid: true,
     newTask: new NewTask(),
-    requiredField: (v: string) => (v.length ? true : "This field is required"),
+    requiredField: (v: string) => (v ? true : "This field is required"),
     validNumber: (v: string) =>
-      v.length && +v % 1 == 0 ? true : "non-negative integer required",
+      !!v && +v % 1 == 0 ? true : "non-negative integer required",
     loading: false,
     showDeadlineDatepicker: false,
     showDeadlineTimepicker: false,
@@ -135,7 +135,7 @@ export default defineComponent({
           .catch((err) => {
             this.loading = false;
             this.loading_fail = true;
-            this.alert_text = err.message + ": Adding user failed";
+            this.alert_text = err.message + ": Adding task failed";
           });
       }
     },

@@ -27,9 +27,8 @@ export default {
       user_id: Number(data.user_id),
       specialization_id: Number(data.specialization_id),
     };
-    const requestdata = JSON.stringify(payload);
-    console.log(requestdata);
-    return await axios.post("/api/tasks", requestdata);
+    console.log(payload);
+    return await axios.post("/api/tasks", payload);
   },
 };
 
