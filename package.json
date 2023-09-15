@@ -46,9 +46,7 @@
     "env": {
       "node": true
     },
-    "plugins": [
-      "simple-import-sort"
-    ],
+    "plugins": [],
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",
@@ -58,9 +56,7 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {
-      "simple-import-sort/imports": "error"
-    }
+    "rules": {}
   },
   "browserslist": [
     "> 1%",

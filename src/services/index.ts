@@ -51,6 +51,16 @@ export class NewUser {
   password = "";
 }
 
+export interface TaskData {
+  user_id: number;
+  task: string;
+  created_at: string;
+  updated_at: string;
+  dead_line: string;
+  specialization_id: number;
+  status: number;
+  deleted_at: number;
+}
 export class NewTask {
   task = "";
   dead_line_date = "";

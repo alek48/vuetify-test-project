@@ -1,16 +1,25 @@
 <template>
   <span>
     <AlertBox v-if="loading_fail" :alert_text="alert_text"></AlertBox>
-    <v-data-table :loading="loading" :headers="headers" :items="tasks">
+    <v-data-table
+      :loading="loading"
+      :headers="headers"
+      :items="tasks"
+      @click:row="showDetails"
+    >
     </v-data-table>
+    <v-dialog v-model="detailsVisible" max-width="60%">
+      <TaskDetails :task="focused_task" />
+    </v-dialog>
   </span>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import api from "../services/index";
+import api, { TaskData } from "../services/index";
 import AlertBox from "./AlertBox.vue";
+import TaskDetails from "./TaskDetails.vue";
 
 export default defineComponent({
   data: () => ({
@@ -24,6 +33,8 @@ export default defineComponent({
     tasks: [],
     loading_fail: false,
     alert_text: "",
+    detailsVisible: false,
+    focused_task: {} as TaskData,
   }),
   async created() {
     this.fetchTasks();
@@ -44,7 +55,11 @@ export default defineComponent({
           console.log(err.code);
         });
     },
+    showDetails(_: unknown, item: { item: TaskData }) {
+      this.detailsVisible = true;
+      this.focused_task = item.item;
+    },
   },
-  components: { AlertBox },
+  components: { AlertBox, TaskDetails },
 });
 </script>
