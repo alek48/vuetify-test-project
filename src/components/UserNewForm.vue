@@ -76,6 +76,9 @@ export default defineComponent({
             console.log(response);
             this.loading = false;
             form.reset(); // no idea how to fix linting here
+            this.$store.dispatch("toast/showToast", {
+              message: "Task added successfully",
+            });
           })
           .catch((err) => {
             console.log(err);

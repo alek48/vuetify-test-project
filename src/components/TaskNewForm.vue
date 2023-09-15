@@ -131,6 +131,9 @@ export default defineComponent({
           .then(() => {
             this.loading = false;
             form.reset();
+            this.$store.dispatch("toast/showToast", {
+              message: "Task added successfully",
+            });
           })
           .catch((err) => {
             this.loading = false;
