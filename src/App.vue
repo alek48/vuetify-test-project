@@ -77,7 +77,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Store } from "vuex";
 
 export default Vue.extend({
   name: "App",
@@ -87,7 +86,7 @@ export default Vue.extend({
   }),
   methods: {
     logOut() {
-      this.$store.dispatch("logOut", {});
+      this.$store.dispatch("logOut");
       this.$store.dispatch("toast/showToast", {
         message: "Succesfully logged out",
         icon: "mdi-logout",

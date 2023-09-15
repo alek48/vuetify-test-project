@@ -72,7 +72,7 @@ export default defineComponent({
         this.loading_fail = false;
         api
           .postNewUser(this.newUser)
-          .then((response) => {
+          .then(() => {
             this.loading = false;
             form.reset(); // no idea how to fix linting here
             this.$store.dispatch("toast/showToast", {
