@@ -12,8 +12,12 @@ export default {
     return await axios.get("/api/tasks");
   },
   postNewUser: async function (data: NewUser) {
-    console.log(data);
-    return await axios.post("/api/users", data);
+    const payload = new FormData();
+    payload.append("name", data.name);
+    payload.append("email", data.email);
+    payload.append("password", data.password);
+    payload.append("phone", data.phone);
+    return await axios.post("/api/users", payload);
   },
   postNewTask: async function (data: NewTask) {
     console.log(data);
