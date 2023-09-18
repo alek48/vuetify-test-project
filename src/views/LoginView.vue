@@ -12,5 +12,10 @@
 import LoginForm from "@/components/LoginForm.vue";
 import { defineComponent } from "vue";
 
-export default defineComponent({ components: { LoginForm } });
+export default defineComponent({
+  components: { LoginForm },
+  mounted() {
+    document.title = "Login/Register";
+  },
+});
 </script>

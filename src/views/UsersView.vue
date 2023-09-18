@@ -16,7 +16,7 @@ import UsersTable from "../components/UsersTable.vue";
 export default Vue.extend({
   components: { UsersTable },
   mounted() {
-    document.title = "Task Manager - Users";
+    document.title = "Users";
   },
 });
 </script>

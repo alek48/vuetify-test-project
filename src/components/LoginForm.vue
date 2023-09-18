@@ -154,10 +154,8 @@ export default defineComponent({
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
-              message: "Registered successfully",
+              message: "Registered successfully, you can log in now",
             });
-            this.$store.dispatch("logIn", response.data.data);
-            this.$router.push({ name: "home" });
           })
           .catch((err) => {
             this.loading = false;

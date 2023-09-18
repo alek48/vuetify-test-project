@@ -27,7 +27,7 @@ import Vue from "vue";
 export default Vue.extend({
   name: "HomeView",
   mounted() {
-    document.title = "Task Manager - Home";
+    document.title = "Dashboard";
   },
   components: { TasksTable },
 });

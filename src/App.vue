@@ -19,7 +19,7 @@
           </v-btn>
         </template>
         <v-list color="secondary" dense nav>
-          <v-list-item>
+          <v-list-item :to="{ name: 'profile' }">
             <v-list-item-icon
               ><v-icon>mdi-account-details</v-icon></v-list-item-icon
             >

@@ -43,6 +43,18 @@ export default {
     payload.append("c_password", data.c_password);
     return await axios.post("/api/register", payload);
   },
+  updateUser: async function (data: NewUser, userId: number) {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+    };
+    return await axios.put("api/users/" + userId, payload);
+  },
+  deleteUser: async function (userId: number) {
+    return await axios.delete("api/users/" + userId);
+  },
 };
 
 export class UserData {

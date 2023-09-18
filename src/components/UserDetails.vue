@@ -80,10 +80,12 @@
 import { defineComponent } from "vue";
 
 import api, { UserData } from "@/services";
+import toast from "@/store/modules/toast";
 
 export default defineComponent({
   props: {
     user_id: { type: Number, required: true },
+    emit_details: { type: Boolean, default: false },
   },
   data: () => ({
     user: new UserData(),
@@ -105,17 +107,26 @@ export default defineComponent({
   methods: {
     async fetchUser(id: number) {
       this.loading = true;
-      await api.getUserById(id).then((response) => {
-        this.user.admin = response.data.admin;
-        this.user.created_at = response.data.created_at;
-        this.user.deleted_at = response.data.deleted_at;
-        this.user.email = response.data.email;
-        this.user.email_verified_at = response.data.email_verified_at;
-        this.user.name = response.data.name;
-        this.user.phone = response.data.phone;
-        this.user.status = response.data.status;
-        this.user.updated_at = response.data.updated_at;
-      });
+      await api
+        .getUserById(id)
+        .then((response) => {
+          this.user.admin = response.data.admin;
+          this.user.created_at = response.data.created_at;
+          this.user.deleted_at = response.data.deleted_at;
+          this.user.email = response.data.email;
+          this.user.email_verified_at = response.data.email_verified_at;
+          this.user.name = response.data.name;
+          this.user.phone = response.data.phone;
+          this.user.status = response.data.status;
+          this.user.updated_at = response.data.updated_at;
+          this.$emit("user-details", this.user);
+        })
+        .catch((err) => {
+          this.$store.dispatch("toast/showToast", {
+            message: err,
+            color: "warning",
+          });
+        });
       this.loading = false;
     },
   },

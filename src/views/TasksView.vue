@@ -16,7 +16,7 @@ import TasksTable from "../components/TasksTable.vue";
 export default Vue.extend({
   components: { TasksTable },
   mounted() {
-    document.title = "Task Manager - Tasks";
+    document.title = "Tasks";
   },
 });
 </script>

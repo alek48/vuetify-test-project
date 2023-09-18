@@ -11,5 +11,10 @@ import { defineComponent } from "vue";
 
 import UserNewForm from "@/components/UserNewForm.vue";
 
-export default defineComponent({ components: { UserNewForm } });
+export default defineComponent({
+  components: { UserNewForm },
+  mounted() {
+    document.title = "Add User";
+  },
+});
 </script>
