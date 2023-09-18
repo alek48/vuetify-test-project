@@ -6,12 +6,32 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Task Tools</v-toolbar-title>
       <v-spacer></v-spacer>
-      <span v-if="$store.state.logged_in">
-        Welcome, {{ $store.state.username }}
-      </span>
-      <v-btn v-if="$store.state.logged_in" @click="logOut" icon>
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
+      <v-menu
+        v-if="$store.state.logged_in"
+        offset-y
+        transition="slide-y-transition"
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" text rounded height="48">
+            {{ $store.state.username }}
+            <v-icon> mdi-account </v-icon>
+          </v-btn>
+        </template>
+        <v-list color="secondary" dense nav>
+          <v-list-item>
+            <v-list-item-icon
+              ><v-icon>mdi-account-details</v-icon></v-list-item-icon
+            >
+            <v-list-item-title>Profile</v-list-item-title>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item @click="logOut">
+            <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
+            <v-list-item-title> Log out </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-btn v-else :to="{ name: 'login' }" icon>
         <v-icon>mdi-login</v-icon>
       </v-btn>
