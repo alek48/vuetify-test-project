@@ -31,6 +31,7 @@ export default new Vuex.Store<State>({
   },
   actions: {
     logIn(context: Context, payload: LoginPayload) {
+      console.log(payload.token);
       context.commit("LOG_IN", payload);
     },
     logOut(context: Context) {

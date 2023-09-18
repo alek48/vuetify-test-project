@@ -80,7 +80,6 @@
 import { defineComponent } from "vue";
 
 import api, { UserData } from "@/services";
-import toast from "@/store/modules/toast";
 
 export default defineComponent({
   props: {

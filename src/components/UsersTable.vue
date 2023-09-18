@@ -27,6 +27,7 @@ import { UserData } from "@/services";
 import api from "../services";
 import AlertBox from "./AlertBox.vue";
 import UserDetails from "./UserDetails.vue";
+import { AxiosError, AxiosResponse } from "axios";
 
 export default defineComponent({
   data: () => ({
@@ -54,12 +55,12 @@ export default defineComponent({
       this.loading = true;
       api
         .getUsersPage(this.current_page)
-        .then((response) => {
+        .then((response: AxiosResponse) => {
           this.users = response.data.data;
           this.loading = false;
           this.pages = response.data.last_page;
         })
-        .catch((err) => {
+        .catch((err: AxiosError) => {
           this.loading_fail = true;
           this.loading = false;
           this.alert_text = err.message + ": Couldn't load data";

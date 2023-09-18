@@ -1,18 +1,26 @@
 import axios from "axios";
+import store from "@/store/index";
 
 axios.defaults.baseURL = "http://192.168.180.111/";
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
+
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "192.168.180.111/";
+axios.defaults.headers.get["Access-Control-Allow-Origin"] = "192.168.180.111/";
+const config = () => ({
+  headers: {
+    Authorization: "Bearer " + store.state.userToken,
+  },
+});
 
 export default {
   getUsersPage: async function (page: number) {
-    return await axios.get("/api/users?page=" + page);
+    console.log(config);
+    return await axios.get("/api/users?page=" + page, config());
   },
   getUserById: async function (id: number) {
-    return await axios.get("/api/users/" + id);
+    return await axios.get("/api/users/" + id, config());
   },
   getTasks: async function () {
-    return await axios.get("/api/tasks");
+    return await axios.get("/api/tasks", config());
   },
   postNewUser: async function (data: NewUser) {
     const payload = new FormData();
@@ -20,7 +28,7 @@ export default {
     payload.append("email", data.email);
     payload.append("password", data.password);
     payload.append("phone", data.phone);
-    return await axios.post("/api/users", payload);
+    return await axios.post("/api/users", payload, config());
   },
   postNewTask: async function (data: NewTask) {
     const dead_line = data.dead_line_date + " " + data.dead_line_time;
@@ -30,7 +38,7 @@ export default {
       user_id: Number(data.user_id),
       specialization_id: Number(data.specialization_id),
     };
-    return await axios.post("/api/tasks", payload);
+    return await axios.post("/api/tasks", payload, config());
   },
   postLogin: async function (data: LoginData) {
     return await axios.post("/api/login", data);
@@ -41,7 +49,7 @@ export default {
     payload.append("email", data.email);
     payload.append("password", data.password);
     payload.append("c_password", data.c_password);
-    return await axios.post("/api/register", payload);
+    return await axios.post("/api/register", payload, config());
   },
   updateUser: async function (data: NewUser, userId: number) {
     const payload = {
@@ -50,10 +58,10 @@ export default {
       phone: data.phone,
       password: data.password,
     };
-    return await axios.put("api/users/" + userId, payload);
+    return await axios.put("api/users/" + userId, payload, config());
   },
   deleteUser: async function (userId: number) {
-    return await axios.delete("api/users/" + userId);
+    return await axios.delete("api/users/" + userId, config());
   },
 };
 

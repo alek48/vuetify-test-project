@@ -126,6 +126,7 @@ export default defineComponent({
         api
           .postLogin(this.loginData)
           .then((response) => {
+            console.log(response);
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
@@ -150,7 +151,7 @@ export default defineComponent({
         this.loading_fail = false;
         api
           .postRegister(this.registerData)
-          .then((response) => {
+          .then(() => {
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
