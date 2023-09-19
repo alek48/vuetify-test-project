@@ -3,6 +3,8 @@ import Vuex, { ActionContext } from "vuex";
 
 import toast from "./modules/toast";
 
+import cookie from "@/services/cookies";
+
 Vue.use(Vuex);
 
 type Context = ActionContext<State, State>;
@@ -32,9 +34,15 @@ export default new Vuex.Store<State>({
   actions: {
     logIn(context: Context, payload: LoginPayload) {
       context.commit("LOG_IN", payload);
+      cookie.set("name", payload.name);
+      cookie.set("token", payload.token);
+      cookie.set("id", payload.id.toString());
     },
     logOut(context: Context) {
       context.commit("LOG_OUT");
+      cookie.set("name", "");
+      cookie.set("token", "");
+      cookie.set("id", "");
     },
   },
   modules: { toast },

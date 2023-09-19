@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading" :disabled="loading">
+  <v-card :loading="loading" :disabled="loading" width="fit-content">
     <v-card-title>{{ task.task }}</v-card-title>
     <v-card-text two-line>
       <v-list>
@@ -77,7 +77,9 @@
         </v-list-item>
       </v-list>
     </v-card-text>
-    <v-card-actions> </v-card-actions>
+    <v-card-actions>
+      <v-btn color="error" @click="deleteTask">Delete task</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -131,6 +133,19 @@ export default defineComponent({
       this.modify = false;
       this.$emit("change");
       this.fetchUserName();
+    },
+    async deleteTask() {
+      api
+        .deleteTaskById(this.task.id)
+        .then(() => {
+          this.$store.dispatch("toast/showToast", { message: "Task deleted" });
+          this.$emit("deletedtask");
+        })
+        .catch((err) =>
+          this.$store.dispatch("toast/showToast", {
+            message: err + ": Couldn't delete task",
+          })
+        );
     },
   },
   watch: {

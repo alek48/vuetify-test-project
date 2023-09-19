@@ -2,17 +2,12 @@
   <span>
     <AlertBox v-if="loading_fail" :alert_text="alert_text"> </AlertBox>
     <v-data-table
-      disable-pagination
-      disable-filtering
-      disable-sort
-      hide-default-footer
       :headers="headers"
       :items="users"
       :loading="loading"
       @click:row="showDetails"
     >
     </v-data-table>
-    <v-pagination :length="pages" v-model="current_page"> </v-pagination>
     <v-dialog v-model="detailsVisible" max-width="60%">
       <UserDetails :user_id="focused_user" />
     </v-dialog>
@@ -32,8 +27,6 @@ import { AxiosError, AxiosResponse } from "axios";
 export default defineComponent({
   data: () => ({
     users: [] as UserData[],
-    pages: 0,
-    current_page: 1,
     focused_user: -1,
     loading: true,
     headers: [
@@ -54,11 +47,10 @@ export default defineComponent({
     async fetchUsers() {
       this.loading = true;
       api
-        .getUsersPage(this.current_page)
+        .getUsers()
         .then((response: AxiosResponse) => {
-          this.users = response.data.data;
+          this.users = response.data;
           this.loading = false;
-          this.pages = response.data.last_page;
         })
         .catch((err: AxiosError) => {
           this.loading_fail = true;

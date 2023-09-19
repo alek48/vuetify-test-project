@@ -40,48 +40,57 @@
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer app v-model="nav_drawer" temporary>
-      <v-list nav>
+      <v-list>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h6"> Navigation </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-subheader>Users</v-subheader>
-        <v-list-item link exact :to="{ name: 'users' }">
-          <v-list-item-icon>
-            <v-icon>mdi-view-list</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>List of users</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link exact :to="{ name: 'new_user' }">
-          <v-list-item-icon>
-            <v-icon>mdi-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Add user</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <v-list-group prepend-icon="mdi-account-multiple">
+          <template v-slot:activator>
+            <v-list-item-title>Users</v-list-item-title>
+          </template>
+
+          <v-list-item link exact :to="{ name: 'users' }">
+            <v-list-item-content>
+              <v-list-item-title>List of users</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-icon>
+              <v-icon>mdi-view-list</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item link exact :to="{ name: 'new_user' }">
+            <v-list-item-content>
+              <v-list-item-title>Add user</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-icon>
+              <v-icon>mdi-plus</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
         <v-divider></v-divider>
-        <v-subheader>Tasks</v-subheader>
-        <v-list-item link exact :to="{ name: 'tasks' }">
-          <v-list-item-icon>
-            <v-icon>mdi-view-list</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>List of tasks</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link exact :to="{ name: 'new_task' }">
-          <v-list-item-icon>
-            <v-icon>mdi-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Add task</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <v-list-group prepend-icon="mdi-format-list-checkbox">
+          <template v-slot:activator>
+            <v-list-item-title> Tasks </v-list-item-title>
+          </template>
+          <v-list-item link exact :to="{ name: 'tasks' }">
+            <v-list-item-content>
+              <v-list-item-title>List of tasks</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-icon>
+              <v-icon>mdi-view-list</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item link exact :to="{ name: 'new_task' }">
+            <v-list-item-content>
+              <v-list-item-title>Add task</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-icon>
+              <v-icon>mdi-plus</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
 
@@ -97,6 +106,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import cookies from "./services/cookies";
 
 export default Vue.extend({
   name: "App",
@@ -104,6 +114,16 @@ export default Vue.extend({
   data: () => ({
     nav_drawer: false,
   }),
+  created() {
+    const cookieLogin = {
+      name: cookies.get("name"),
+      id: cookies.get("id"),
+      token: cookies.get("token"),
+    };
+    if (cookieLogin.name && cookieLogin.id && cookieLogin.token) {
+      this.$store.dispatch("logIn", cookieLogin);
+    }
+  },
   methods: {
     logOut() {
       this.$store.dispatch("logOut");

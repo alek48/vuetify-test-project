@@ -12,9 +12,9 @@ const config = () => ({
 });
 
 export default {
-  getUsersPage: async function (page: number) {
+  getUsers: async function () {
     console.log(config);
-    return await axios.get("/api/users?page=" + page, config());
+    return await axios.get("/api/users", config());
   },
   getUserById: async function (id: number) {
     return await axios.get("/api/users/" + id, config());
@@ -71,6 +71,9 @@ export default {
   },
   deleteUser: async function (userId: number) {
     return await axios.delete("api/users/" + userId, config());
+  },
+  deleteTaskById: async function (taskId: number) {
+    return await axios.delete("api/tasks/" + taskId, config());
   },
 };
 
