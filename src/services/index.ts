@@ -40,6 +40,15 @@ export default {
     };
     return await axios.post("/api/tasks", payload, config());
   },
+  postUpdatedTask: async function (data: TaskData) {
+    const payload = {
+      task: data.task,
+      dead_line: data.dead_line,
+      user_id: Number(data.user_id),
+      specialization_id: Number(data.specialization_id),
+    };
+    return await axios.put("/api/tasks/" + data.id, payload, config());
+  },
   postLogin: async function (data: LoginData) {
     return await axios.post("/api/login", data);
   },
@@ -86,6 +95,7 @@ export class NewUser {
 }
 
 export interface TaskData {
+  id: number;
   user_id: number;
   task: string;
   created_at: string;

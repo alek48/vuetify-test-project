@@ -12,7 +12,7 @@
       </template>
     </v-data-table>
     <v-dialog v-model="detailsVisible" max-width="60%">
-      <TaskDetails :task="focused_task" />
+      <TaskDetails :task="focused_task" @change="fetchTasks" />
     </v-dialog>
   </span>
 </template>

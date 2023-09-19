@@ -119,7 +119,8 @@ export default Vue.extend({
             })
           );
         this.loading = false;
-        this.$refs.detailsComp.fetchUser(this.$store.state.userId);
+        const detailsCmp = this.$refs.detailsComp as any;
+        detailsCmp.fetchUser(this.$store.state.userId);
       }
     },
     async deleteAccount() {

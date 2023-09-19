@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :loading="loading" :disabled="loading">
     <v-card-title>{{ task.task }}</v-card-title>
     <v-card-text two-line>
       <v-list>
@@ -53,9 +53,27 @@
         <v-list-item>
           <v-list-item-icon> <v-icon></v-icon> </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>deleted_at</v-list-item-title>
-            <v-list-item-subtitle>{{ task.deleted_at }}</v-list-item-subtitle>
+            <v-list-item-title>Assigned user</v-list-item-title>
+            <v-list-item-subtitle>{{ userName }}</v-list-item-subtitle>
           </v-list-item-content>
+          <v-list-item-action>
+            <v-btn v-if="!modify" color="accent" @click="modify = !modify">
+              Change user
+            </v-btn>
+            <div class="d-flex" v-else>
+              <v-text-field
+                label="new userID"
+                type="number"
+                v-model="newId"
+              ></v-text-field>
+              <v-btn icon color="success" @click="updateTask">
+                <v-icon>mdi-check-circle</v-icon>
+              </v-btn>
+              <v-btn icon color="warning" @click="modify = !modify">
+                <v-icon>mdi-close-circle</v-icon>
+              </v-btn>
+            </div>
+          </v-list-item-action>
         </v-list-item>
       </v-list>
     </v-card-text>
@@ -66,11 +84,60 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import { TaskData } from "@/services";
+import api, { TaskData } from "@/services";
 
 export default defineComponent({
   props: {
     task: { type: Object as PropType<TaskData>, required: true },
+  },
+  data: () => ({
+    userName: "",
+    modify: false,
+    loading: false,
+    newId: 0,
+  }),
+  created() {
+    this.fetchUserName();
+  },
+  methods: {
+    async fetchUserName() {
+      this.loading = true;
+      await api
+        .getUserById(this.task.user_id)
+        .then((response) => (this.userName = response.data.name))
+        .catch((err) =>
+          this.$store.dispatch("toast/showToast", {
+            message: err + ": couldn't load all data",
+          })
+        );
+      this.loading = false;
+    },
+    async updateTask() {
+      this.loading = true;
+      var task = this.$props.task;
+      task.user_id = this.newId;
+      await api
+        .postUpdatedTask(task)
+        .then(() => {
+          this.$store.dispatch("toast/showToast", {
+            message: "Task succesfully updated",
+          });
+        })
+        .catch((err) =>
+          this.$store.dispatch("toast/showToast", {
+            message: err + ": Couldn't update task",
+          })
+        );
+      this.modify = false;
+      this.$emit("change");
+      this.fetchUserName();
+    },
+  },
+  watch: {
+    task() {
+      this.modify = false;
+      this.fetchUserName();
+    },
   },
 });
 </script>
