@@ -4,9 +4,7 @@
     <v-card-text two-line>
       <v-list>
         <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-file-plus</v-icon>
-          </v-list-item-icon>
+          <v-list-item-icon><v-icon>mdi-file-plus</v-icon></v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Task added on</v-list-item-title>
             <v-list-item-subtitle>
@@ -26,20 +24,46 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-calendar-clock</v-icon>
-          </v-list-item-icon>
+          <v-tooltip left>
+            <template v-slot:activator="{ on }">
+              <v-list-item-icon v-on="deadlineClose ? on : undefined">
+                <v-badge
+                  :value="deadlineClose"
+                  overlap
+                  :color="relativeHours() < 0 ? 'error' : 'warning'"
+                  icon="mdi-exclamation-thick"
+                >
+                  <v-icon>mdi-calendar-clock</v-icon>
+                </v-badge>
+              </v-list-item-icon>
+            </template>
+            {{
+              relativeHours() < 0
+                ? "This task has missed deadline"
+                : "Deadline is less than 2 days away"
+            }}
+          </v-tooltip>
           <v-list-item-content>
             <v-list-item-title>Deadline</v-list-item-title>
-            <v-list-item-subtitle>{{ task.dead_line }}</v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ task.dead_line }} -
+              {{ relativeTime() }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-icon> <v-icon></v-icon> </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>status</v-list-item-title>
-            <v-list-item-subtitle>{{ task.status }}</v-list-item-subtitle>
+            <v-list-item-title>Finished?</v-list-item-title>
+            <v-list-item-subtitle>
+              {{ task.status ? "Yes" : "No" }}
+            </v-list-item-subtitle>
           </v-list-item-content>
+          <v-list-item-action>
+            <v-btn color="accent" @click="changeStatus">
+              {{ task.status ? "Reopen task" : "Finish task" }}
+            </v-btn>
+          </v-list-item-action>
         </v-list-item>
         <v-list-item>
           <v-list-item-icon> <v-icon></v-icon> </v-list-item-icon>
@@ -101,17 +125,24 @@ export default defineComponent({
   created() {
     this.fetchUserName();
   },
+  computed: {
+    deadlineClose(): boolean {
+      return this.relativeHours() < 48 && this.task.status === 0;
+    },
+  },
   methods: {
     async fetchUserName() {
       this.loading = true;
       await api
         .getUserById(this.task.user_id)
         .then((response) => (this.userName = response.data.name))
-        .catch((err) =>
+        .catch((err) => {
           this.$store.dispatch("toast/showToast", {
             message: err + ": couldn't load all data",
-          })
-        );
+            color: "warning",
+          });
+          this.userName = "ID: " + this.task.user_id;
+        });
       this.loading = false;
     },
     async updateTask() {
@@ -128,6 +159,7 @@ export default defineComponent({
         .catch((err) =>
           this.$store.dispatch("toast/showToast", {
             message: err + ": Couldn't update task",
+            color: "error",
           })
         );
       this.modify = false;
@@ -139,13 +171,49 @@ export default defineComponent({
         .deleteTaskById(this.task.id)
         .then(() => {
           this.$store.dispatch("toast/showToast", { message: "Task deleted" });
-          this.$emit("deletedtask");
+          this.$emit("close");
         })
         .catch((err) =>
           this.$store.dispatch("toast/showToast", {
             message: err + ": Couldn't delete task",
           })
         );
+    },
+    relativeTime() {
+      var duration = Date.parse(this.task.dead_line) - Date.now();
+      var inPast = duration < 0;
+      duration = Math.abs(duration);
+      const days = Math.floor(duration / (24 * 60 * 60 * 1000));
+      duration = duration % (24 * 60 * 60 * 1000);
+      const hours = Math.floor(duration / (60 * 60 * 1000));
+      duration = duration % (60 * 60 * 1000);
+      const minutes = Math.floor(duration / (60 * 1000));
+      const stringified = days
+        ? days + " days"
+        : hours + " hours " + minutes + " minutes";
+      return inPast ? stringified + " ago" : "in " + stringified;
+    },
+    relativeHours() {
+      var duration = Date.parse(this.task.dead_line) - Date.now();
+      return duration / (1000 * 60 * 60);
+    },
+    async changeStatus() {
+      this.loading = true;
+      await api
+        .updateTaskStatus(this.task.id)
+        .then(() => {
+          this.$store.dispatch("toast/showToast", {
+            message: "Task succesfully updated",
+          });
+        })
+        .catch((err) =>
+          this.$store.dispatch("toast/showToast", {
+            message: err + ": Couldn't update task",
+          })
+        );
+      this.loading = false;
+      this.modify = false;
+      this.$emit("close");
     },
   },
   watch: {

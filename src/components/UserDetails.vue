@@ -73,6 +73,23 @@
         </v-list-item>
       </v-list>
     </v-card-text>
+    <v-card-action>
+      <v-dialog v-model="showConfirm" width="auto">
+        <template v-slot:activator="{ on }">
+          <v-btn color="error" v-on="on"> Delete Account </v-btn>
+        </template>
+        <v-card tile outlined>
+          <v-card-title> Deleting account</v-card-title>
+          <v-card-text>
+            This action is permament, are you sure to continue?
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="error" @click="deleteAccount"> Yes, delete </v-btn>
+            <v-btn color="secondary" @click="showConfirm = false"> No </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card-action>
   </v-card>
 </template>
 
@@ -89,6 +106,7 @@ export default defineComponent({
   data: () => ({
     user: new UserData(),
     loading: false,
+    showConfirm: false,
   }),
   created() {
     this.fetchUser(this.user_id);
@@ -127,6 +145,22 @@ export default defineComponent({
           });
         });
       this.loading = false;
+    },
+    async deleteAccount() {
+      await api
+        .deleteUser(this.user_id)
+        .then(() => {
+          if (this.user_id === this.$store.state.user_id) {
+            this.$store.dispatch("logOut");
+            this.$router.push({ name: "home" });
+          } else {
+            this.$emit("deleteAccount");
+          }
+          this.$store.dispatch("toast/showToast", {
+            message: "Account deleted",
+          });
+        })
+        .catch();
     },
   },
   watch: {

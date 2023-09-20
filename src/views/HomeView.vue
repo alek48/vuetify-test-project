@@ -34,20 +34,19 @@
           <v-card-text>
             <div class="d-flex justify-space-around">
               <div class="d-flex flex-column align-center">
-                Your tasks
                 <v-progress-circular
                   color="success"
-                  size="100"
-                  width="15"
+                  size="200"
+                  width="20"
                   rotate="-90"
                   :value="(100 * finished_tasks) / total_tasks"
                 >
-                  <span class="white--text">
+                  <span class="white--text text-h3">
                     {{ finished_tasks }} / {{ total_tasks }}
                   </span>
                 </v-progress-circular>
               </div>
-              <div class="d-flex flex-column align-center">
+              <!-- <div class="d-flex flex-column align-center">
                 Total tasks
                 <v-progress-circular
                   color="success"
@@ -60,7 +59,7 @@
                     {{ finished_tasks }} / {{ total_tasks }}
                   </span>
                 </v-progress-circular>
-              </div>
+              </div> -->
             </div>
           </v-card-text>
         </v-card>
@@ -73,14 +72,34 @@
 import TasksTable from "@/components/TasksTable.vue";
 import Vue from "vue";
 
+import api from "@/services/index";
+
 export default Vue.extend({
   name: "HomeView",
   mounted() {
     document.title = "Dashboard";
   },
+  async created() {
+    if (this.$store.state.logged_in) {
+      api
+        .getTasksStats()
+        .then((response) => {
+          var answer = response.data;
+          const finished = Number(answer.ok);
+          const in_progress = Number(answer.no);
+          this.total_tasks = finished + in_progress;
+          this.finished_tasks = finished;
+        })
+        .catch((err) => {
+          this.$store.dispatch("toast/showToast", {
+            message: "Couldn't load task statistics",
+          });
+        });
+    }
+  },
   data: () => ({
-    total_tasks: 5,
-    finished_tasks: 1,
+    total_tasks: 1,
+    finished_tasks: 0,
   }),
   components: { TasksTable },
 });

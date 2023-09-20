@@ -9,7 +9,10 @@
     >
     </v-data-table>
     <v-dialog v-model="detailsVisible" max-width="60%">
-      <UserDetails :user_id="focused_user" />
+      <UserDetails
+        :user_id="focused_user"
+        @deleteAccount="[(detailsVisible = false), fetchUsers()]"
+      />
     </v-dialog>
   </span>
 </template>
@@ -28,7 +31,7 @@ export default defineComponent({
   data: () => ({
     users: [] as UserData[],
     focused_user: -1,
-    loading: true,
+    loading: false,
     headers: [
       { text: "id", value: "id" },
       { text: "name", value: "name" },

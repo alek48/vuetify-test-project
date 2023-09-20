@@ -13,7 +13,6 @@ const config = () => ({
 
 export default {
   getUsers: async function () {
-    console.log(config);
     return await axios.get("/api/users", config());
   },
   getUserById: async function (id: number) {
@@ -74,6 +73,12 @@ export default {
   },
   deleteTaskById: async function (taskId: number) {
     return await axios.delete("api/tasks/" + taskId, config());
+  },
+  getTasksStats: async function () {
+    return await axios.get("api/taskStatus");
+  },
+  updateTaskStatus: async function (taskId: number) {
+    return await axios.put("api/changeStatus/" + taskId, undefined, config());
   },
 };
 

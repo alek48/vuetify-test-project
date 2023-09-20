@@ -42,7 +42,7 @@
       <TaskDetails
         :task="focused_task"
         @change="fetchTasks"
-        @deletedtask="[fetchTasks(), (detailsVisible = false)]"
+        @close="[fetchTasks(), (detailsVisible = false)]"
       />
     </v-dialog>
   </span>
@@ -83,7 +83,6 @@ export default defineComponent({
         .then((response) => {
           if (this.filter) {
             this.tasks = response.data.filter((v: TaskData) => {
-              console.log(typeof v.user_id);
               return v.user_id === this.filter;
             });
           } else {

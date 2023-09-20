@@ -50,26 +50,6 @@
             <v-btn color="success" :disabled="!valid" @click="updateUser">
               Update
             </v-btn>
-            <v-dialog v-model="showConfirm" width="auto">
-              <template v-slot:activator="{ on }">
-                <v-btn color="error" v-on="on"> Delete Account </v-btn>
-              </template>
-              <v-card tile outlined>
-                <v-card-title> Deletin account</v-card-title>
-                <v-card-text
-                  >This action is permament, are you sure to
-                  continue?</v-card-text
-                >
-                <v-card-actions>
-                  <v-btn color="error" @click="deleteAccount"
-                    >Yes, delete my account</v-btn
-                  >
-                  <v-btn color="secondary" @click="showConfirm = false">
-                    No
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -91,7 +71,6 @@ export default Vue.extend({
     newUser: new NewUser(),
     valid: true,
     loading: false,
-    showConfirm: false,
     requiredField: [(v: string) => !!v || "This field is required"],
   }),
   methods: {
@@ -122,19 +101,6 @@ export default Vue.extend({
         const detailsCmp = this.$refs.detailsComp as any;
         detailsCmp.fetchUser(this.$store.state.userId);
       }
-    },
-    async deleteAccount() {
-      console.log("deleting");
-      await api
-        .deleteUser(this.$store.state.userId)
-        .then(() => {
-          this.$store.dispatch("logOut");
-          this.$store.dispatch("toast/showToast", {
-            message: "Account deleted",
-          });
-          this.$router.push({ name: "home" });
-        })
-        .catch();
     },
   },
   components: { UserDetails },

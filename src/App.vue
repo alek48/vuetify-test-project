@@ -117,7 +117,7 @@ export default Vue.extend({
   created() {
     const cookieLogin = {
       name: cookies.get("name"),
-      id: cookies.get("id"),
+      id: Number(cookies.get("id")),
       token: cookies.get("token"),
     };
     if (cookieLogin.name && cookieLogin.id && cookieLogin.token) {

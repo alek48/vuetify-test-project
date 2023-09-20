@@ -126,7 +126,6 @@ export default defineComponent({
         api
           .postLogin(this.loginData)
           .then((response) => {
-            console.log(response);
             this.loading = false;
             form.reset();
             this.$store.dispatch("toast/showToast", {
