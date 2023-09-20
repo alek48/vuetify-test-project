@@ -30,8 +30,8 @@ export default {
 
 type Context = ActionContext<CacheState, State>;
 
-type UserCachedData = { id: number; name: string };
-type SpecCachedData = UserCachedData;
+export type UserCachedData = { id: number; name: string };
+export type SpecCachedData = UserCachedData;
 
 export interface CacheState {
   users: Array<UserCachedData>;

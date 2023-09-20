@@ -113,6 +113,7 @@
 import { defineComponent, PropType } from "vue";
 
 import api, { TaskData } from "@/services";
+import { UserCachedData, SpecCachedData } from "@/store/modules/cache";
 
 export default defineComponent({
   props: {
@@ -139,10 +140,10 @@ export default defineComponent({
   methods: {
     async updateFromCache() {
       this.userName = this.$store.state.cache.users.find(
-        (u: any) => u.id === this.task.user_id
+        (u: UserCachedData) => u.id === this.task.user_id
       ).name;
       this.specName = this.$store.state.cache.specializations.find(
-        (s: any) => s.id === this.task.specialization_id
+        (s: SpecCachedData) => s.id === this.task.specialization_id
       ).name;
     },
     async updateTask() {
