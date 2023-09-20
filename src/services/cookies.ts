@@ -7,7 +7,7 @@ export default {
     const cookie = decodeURIComponent(document.cookie).split(";");
     for (const elem of cookie) {
       if (elem.trimStart().startsWith(searchString)) {
-        return elem.substring(searchString.length + 1);
+        return elem.trimStart().substring(searchString.length);
       }
     }
     return "";

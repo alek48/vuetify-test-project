@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex, { ActionContext } from "vuex";
 
 import toast from "./modules/toast";
+import cache from "./modules/cache";
 
 import cookie from "@/services/cookies";
 
@@ -45,7 +46,7 @@ export default new Vuex.Store<State>({
       cookie.set("id", "");
     },
   },
-  modules: { toast },
+  modules: { toast, cache },
 });
 
 export interface State {

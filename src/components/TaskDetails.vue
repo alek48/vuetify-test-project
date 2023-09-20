@@ -70,7 +70,7 @@
           <v-list-item-content>
             <v-list-item-title>specialization</v-list-item-title>
             <v-list-item-subtitle>
-              {{ task.specialization_id }}
+              {{ specName }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -85,11 +85,13 @@
               Change user
             </v-btn>
             <div class="d-flex" v-else>
-              <v-text-field
-                label="new userID"
-                type="number"
+              <v-autocomplete
+                :items="usersOptions"
+                item-text="name"
+                item-value="id"
                 v-model="newId"
-              ></v-text-field>
+              >
+              </v-autocomplete>
               <v-btn icon color="success" @click="updateTask">
                 <v-icon>mdi-check-circle</v-icon>
               </v-btn>
@@ -118,12 +120,16 @@ export default defineComponent({
   },
   data: () => ({
     userName: "",
+    specName: "",
     modify: false,
     loading: false,
     newId: 0,
+    usersOptions: [],
   }),
   created() {
-    this.fetchUserName();
+    this.updateFromCache();
+    this.usersOptions = this.$store.state.cache.users;
+    this.newId = this.task.user_id;
   },
   computed: {
     deadlineClose(): boolean {
@@ -131,24 +137,19 @@ export default defineComponent({
     },
   },
   methods: {
-    async fetchUserName() {
-      this.loading = true;
-      await api
-        .getUserById(this.task.user_id)
-        .then((response) => (this.userName = response.data.name))
-        .catch((err) => {
-          this.$store.dispatch("toast/showToast", {
-            message: err + ": couldn't load all data",
-            color: "warning",
-          });
-          this.userName = "ID: " + this.task.user_id;
-        });
-      this.loading = false;
+    async updateFromCache() {
+      this.userName = this.$store.state.cache.users.find(
+        (u: any) => u.id === this.task.user_id
+      ).name;
+      this.specName = this.$store.state.cache.specializations.find(
+        (s: any) => s.id === this.task.specialization_id
+      ).name;
     },
     async updateTask() {
       this.loading = true;
       var task = this.$props.task;
       task.user_id = this.newId;
+      console.log(this.newId);
       await api
         .postUpdatedTask(task)
         .then(() => {
@@ -164,7 +165,9 @@ export default defineComponent({
         );
       this.modify = false;
       this.$emit("change");
-      this.fetchUserName();
+      this.updateFromCache();
+
+      this.loading = false;
     },
     async deleteTask() {
       api
@@ -219,7 +222,7 @@ export default defineComponent({
   watch: {
     task() {
       this.modify = false;
-      this.fetchUserName();
+      this.updateFromCache();
     },
   },
 });

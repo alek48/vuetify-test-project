@@ -21,26 +21,41 @@ const routes: Array<RouteConfig> = [
     path: "/users",
     name: "users",
     component: UsersView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/users/new",
     name: "new_user",
     component: NewUserView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/tasks",
     name: "tasks",
     component: TasksView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/tasks/new",
     name: "new_task",
     component: NewTaskView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/login",
     name: "login",
     component: LoginView,
+    meta: {
+      onlyLoggedOut: true,
+    },
   },
   {
     path: "/profile",
@@ -58,11 +73,21 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeResolve((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.logged_in) {
-      next({ name: "login" });
+      next({ name: "login", query: { redirect: to.name } });
       return;
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.onlyLoggedOut)) {
+    if (store.state.logged_in) {
+      if (to.query.redirect) {
+        next(to.query.redirect as string);
+      } else {
+        next({ name: "home" });
+      }
     } else {
       next();
     }

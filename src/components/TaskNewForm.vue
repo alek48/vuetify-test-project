@@ -73,18 +73,22 @@
                     ></v-time-picker>
                   </v-menu>
                 </div>
-                <v-text-field
+                <v-select
+                  :items="usersOptions"
+                  item-text="name"
+                  item-value="id"
                   v-model="newTask.user_id"
-                  label="User ID"
-                  :rules="[validNumber]"
-                  type="number"
-                ></v-text-field>
-                <v-text-field
+                  label="Assigned User"
+                  :rules="[requiredField]"
+                ></v-select>
+                <v-select
+                  :items="specsOptions"
+                  item-text="name"
+                  item-value="id"
                   v-model="newTask.specialization_id"
-                  label="Specialization ID"
-                  :rules="[validNumber]"
-                  type="number"
-                ></v-text-field>
+                  label="Specialization"
+                  :rules="[requiredField]"
+                ></v-select>
               </v-col>
             </v-row>
           </v-container>
@@ -112,14 +116,20 @@ export default defineComponent({
     valid: true,
     newTask: new NewTask(),
     requiredField: (v: string) => (v ? true : "This field is required"),
-    validNumber: (v: string) =>
-      !!v && +v % 1 == 0 ? true : "non-negative integer required",
     loading: false,
     showDeadlineDatepicker: false,
     showDeadlineTimepicker: false,
     loading_fail: false,
     alert_text: "",
+    usersOptions: [],
+    specsOptions: [],
   }),
+  created() {
+    api
+      .getSpecializationsToCache()
+      .then((this.specsOptions = this.$store.state.cache.specializations));
+    api.getUsers().then((this.usersOptions = this.$store.state.cache.users));
+  },
   methods: {
     async submitForm() {
       var form = this.$refs.form as HTMLFormElement;

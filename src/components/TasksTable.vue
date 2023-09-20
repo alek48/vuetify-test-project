@@ -6,7 +6,11 @@
       :headers="headers"
       :items="tasks"
       @click:row="showDetails"
+      sort-by="dead_line"
     >
+      <template v-slot:top>
+        <v-switch v-model="hideFinished" label="Hide finished tasks"></v-switch>
+      </template>
       <template v-slot:item.dead_line="{ value, item }">
         <div class="d-flex justify-space-between">
           <span>{{ relativeTime(value) }}</span>
@@ -35,7 +39,9 @@
         </div>
       </template>
       <template v-slot:item.status="{ value }">
-        {{ value ? "Yes" : "no" }}
+        <v-icon color="white">
+          {{ value ? "mdi-check" : "mdi-close" }}
+        </v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="detailsVisible" max-width="90%" width="fit-content">
@@ -61,19 +67,32 @@ export default defineComponent({
   },
   data: () => ({
     loading: true,
-    headers: [
-      { text: "Task", value: "task" },
-      { text: "Deadline", value: "dead_line" },
-      { text: "Finished", value: "status" },
-    ],
+    hideFinished: false,
+
     tasks: [],
     loading_fail: false,
     alert_text: "",
     detailsVisible: false,
     focused_task: {} as TaskData,
   }),
+  computed: {
+    headers(): any {
+      return [
+        { text: "Task", value: "task" },
+        { text: "Deadline", value: "dead_line", width: 200 },
+        {
+          text: "Finished?",
+          value: "status",
+          width: 100,
+          align: "center",
+          filter: this.statusFilter,
+        },
+      ];
+    },
+  },
   async created() {
     this.fetchTasks();
+    api.getSpecializationsToCache();
   },
   methods: {
     async fetchTasks() {
@@ -85,6 +104,7 @@ export default defineComponent({
             this.tasks = response.data.filter((v: TaskData) => {
               return v.user_id === this.filter;
             });
+            this.calculateStats();
           } else {
             this.tasks = response.data;
           }
@@ -95,6 +115,14 @@ export default defineComponent({
           this.loading = false;
           this.alert_text = err.message + ": Couldn't load data";
         });
+    },
+    calculateStats() {
+      var total = this.tasks.length;
+      var completed = this.tasks.reduce(
+        (total, x: TaskData) => total + x.status,
+        0
+      );
+      this.$emit("taskStats", { total: total, completed: completed });
     },
     showDetails(_: unknown, item: { item: TaskData }) {
       this.detailsVisible = true;
@@ -117,6 +145,9 @@ export default defineComponent({
     relativeHours(timeString: string) {
       var duration = Date.parse(timeString) - Date.now();
       return duration / (1000 * 60 * 60);
+    },
+    statusFilter(v: number) {
+      return !(v && this.hideFinished);
     },
   },
   components: { AlertBox, TaskDetails },

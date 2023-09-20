@@ -39,6 +39,7 @@
                       v-model="newUser.password"
                       label="Password"
                       :rules="requiredField"
+                      type="password"
                       required
                     ></v-text-field>
                   </v-col>

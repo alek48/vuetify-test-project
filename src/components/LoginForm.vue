@@ -23,6 +23,7 @@
                         :rules="[requiredField]"
                         required
                         type="password"
+                        @keydown.enter="submitLoginForm"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -105,6 +106,7 @@ import { defineComponent } from "vue";
 import api, { LoginData, RegisterData } from "@/services";
 
 import AlertBox from "./AlertBox.vue";
+import { RawLocation } from "vue-router";
 
 export default defineComponent({
   data: () => ({
@@ -134,7 +136,11 @@ export default defineComponent({
               icon: "mdi-login",
             });
             this.$store.dispatch("logIn", response.data.data);
-            this.$router.push({ name: "home" });
+            if (this.$route.query.redirect) {
+              this.$router.push(this.$route.query.redirect as RawLocation);
+            } else {
+              this.$router.push({ name: "home" });
+            }
           })
           .catch((err) => {
             this.loading = false;
