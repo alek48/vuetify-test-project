@@ -150,24 +150,25 @@ export default defineComponent({
       this.loading = true;
       var task = this.$props.task;
       task.user_id = this.newId;
-      await api
+      api
         .postUpdatedTask(task)
         .then(() => {
           this.$store.dispatch("toast/showToast", {
             message: "Task succesfully updated",
           });
+          this.modify = false;
+          this.$emit("change");
+          this.updateFromCache();
+          this.loading = false;
         })
-        .catch((err) =>
+        .catch((err) => {
           this.$store.dispatch("toast/showToast", {
             message: err + ": Couldn't update task",
             color: "error",
-          })
-        );
-      this.modify = false;
-      this.$emit("change");
-      this.updateFromCache();
-
-      this.loading = false;
+          });
+          this.modify = false;
+          this.loading = false;
+        });
     },
     async deleteTask() {
       api
@@ -208,15 +209,18 @@ export default defineComponent({
           this.$store.dispatch("toast/showToast", {
             message: "Task succesfully updated",
           });
+          this.loading = false;
+          this.modify = false;
+          this.$emit("close");
         })
-        .catch((err) =>
+        .catch((err) => {
           this.$store.dispatch("toast/showToast", {
             message: err + ": Couldn't update task",
-          })
-        );
-      this.loading = false;
-      this.modify = false;
-      this.$emit("close");
+          });
+          this.loading = false;
+          this.modify = false;
+          this.$emit("close");
+        });
     },
   },
   watch: {

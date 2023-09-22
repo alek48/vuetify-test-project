@@ -51,7 +51,7 @@ export default defineComponent({
       this.loading = true;
       api
         .getUsers()
-        .then((response: any) => {
+        .then((response) => {
           this.users = response.data;
           this.loading = false;
         })

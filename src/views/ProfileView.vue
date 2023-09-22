@@ -84,7 +84,7 @@ export default Vue.extend({
       const form = this.$refs.form as HTMLFormElement;
       if (form.validate()) {
         this.loading = true;
-        await api
+        api
           .updateUser(this.newUser, this.$store.state.userId)
           .then(() => {
             this.$store.dispatch("toast/showToast", {
@@ -97,10 +97,12 @@ export default Vue.extend({
               message: "Error while updating profile",
               color: "error",
             })
-          );
-        this.loading = false;
-        const detailsCmp = this.$refs.detailsComp as any;
-        detailsCmp.fetchUser(this.$store.state.userId);
+          )
+          .finally(() => {
+            this.loading = false;
+            const detailsCmp = this.$refs.detailsComp as any;
+            detailsCmp.fetchUser(this.$store.state.userId);
+          });
       }
     },
   },

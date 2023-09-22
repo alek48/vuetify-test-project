@@ -124,7 +124,7 @@ export default defineComponent({
   methods: {
     async fetchUser(id: number) {
       this.loading = true;
-      await api
+      api
         .getUserById(id)
         .then((response) => {
           this.user.admin = response.data.admin;
@@ -137,17 +137,18 @@ export default defineComponent({
           this.user.status = response.data.status;
           this.user.updated_at = response.data.updated_at;
           this.$emit("user-details", this.user);
+          this.loading = false;
         })
         .catch((err) => {
           this.$store.dispatch("toast/showToast", {
             message: err,
             color: "warning",
           });
+          this.loading = false;
         });
-      this.loading = false;
     },
     async deleteAccount() {
-      await api
+      api
         .deleteUser(this.user_id)
         .then(() => {
           if (this.user_id === this.$store.state.user_id) {
@@ -160,7 +161,12 @@ export default defineComponent({
             message: "Account deleted",
           });
         })
-        .catch();
+        .catch(() => {
+          this.$store.dispatch("toast/showToast", {
+            message: "Couldn't delete accout",
+            color: "error",
+          });
+        });
     },
   },
   watch: {

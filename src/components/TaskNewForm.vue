@@ -111,6 +111,7 @@ import { defineComponent } from "vue";
 import api, { NewTask } from "@/services";
 
 import AlertBox from "./AlertBox.vue";
+import store from "@/store";
 
 export default defineComponent({
   data: () => ({
@@ -128,12 +129,20 @@ export default defineComponent({
   created() {
     api
       .getSpecializationsToCache()
-      .then(
-        () => (this.specsOptions = this.$store.state.cache.specializations)
+      .then(() => (this.specsOptions = this.$store.state.cache.specializations))
+      .catch(() =>
+        store.dispatch("toast/showToast", {
+          message: "Couldn't load specializations to cache",
+        })
       );
     api
       .getUsers()
-      .then(() => (this.usersOptions = this.$store.state.cache.users));
+      .then(() => (this.usersOptions = this.$store.state.cache.users))
+      .catch(() =>
+        store.dispatch("toast/showToast", {
+          message: "Couldn't load users to cache",
+        })
+      );
   },
   methods: {
     async submitForm() {

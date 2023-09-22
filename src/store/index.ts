@@ -6,6 +6,8 @@ import cache from "./modules/cache";
 
 import cookie from "@/services/cookies";
 
+import api from "@/services/index";
+
 Vue.use(Vuex);
 
 type Context = ActionContext<State, State>;
@@ -38,6 +40,11 @@ export default new Vuex.Store<State>({
       cookie.set("name", payload.name);
       cookie.set("token", payload.token);
       cookie.set("id", payload.id.toString());
+      api.getSpecializationsToCache();
+      api
+        .getUsers()
+        .then(() => ({}))
+        .catch(() => ({}));
     },
     logOut(context: Context) {
       context.commit("LOG_OUT");

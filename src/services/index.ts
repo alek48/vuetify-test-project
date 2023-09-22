@@ -16,21 +16,25 @@ export default {
     const req = axios.get("/api/users", config());
     req
       .then((request) => {
-        console.log(request);
         const usersCache = [];
         for (const u of request.data) {
           usersCache.push({ id: u.id, name: u.name });
         }
         store.dispatch("cache/setUsers", usersCache);
       })
-      .catch((e) => console.log(e));
+      .catch(() =>
+        store.dispatch("toast/showToast", {
+          message: "Couldn't load users to cache",
+          color: "warning",
+        })
+      );
     return req;
   },
   getUserById: async function (id: number) {
-    return await axios.get("/api/users/" + id, config());
+    return axios.get("/api/users/" + id, config());
   },
   getTasks: async function () {
-    return await axios.get("/api/tasks", config());
+    return axios.get("/api/tasks", config());
   },
   postNewUser: async function (data: NewUser) {
     const payload = new FormData();
@@ -38,7 +42,7 @@ export default {
     payload.append("email", data.email);
     payload.append("password", data.password);
     payload.append("phone", data.phone);
-    return await axios.post("/api/users", payload, config());
+    return axios.post("/api/users", payload, config());
   },
   postNewTask: async function (data: NewTask) {
     const dead_line = data.dead_line_date + " " + data.dead_line_time;

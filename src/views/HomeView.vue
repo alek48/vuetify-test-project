@@ -207,7 +207,12 @@ export default Vue.extend({
   },
   async created() {
     if (this.$store.state.logged_in) {
-      this.getGlobalTaskStats();
+      this.getGlobalTaskStats().catch((e) =>
+        this.$store.dispatch("toast/showToast", {
+          message: "Your database access has expired, please relogin.",
+          color: "warning",
+        })
+      );
       this.getTimelineEvents();
     }
   },
