@@ -13,15 +13,18 @@ const config = () => ({
 
 export default {
   getUsers: async function () {
-    const request = axios.get("/api/users", config());
-    request.then((data) => {
-      const usersCache = [];
-      for (const u of data.data) {
-        usersCache.push({ id: u.id, name: u.name });
-      }
-      store.dispatch("cache/setUsers", usersCache);
-    });
-    return request;
+    const req = axios.get("/api/users", config());
+    req
+      .then((request) => {
+        console.log(request);
+        const usersCache = [];
+        for (const u of request.data) {
+          usersCache.push({ id: u.id, name: u.name });
+        }
+        store.dispatch("cache/setUsers", usersCache);
+      })
+      .catch((e) => console.log(e));
+    return req;
   },
   getUserById: async function (id: number) {
     return await axios.get("/api/users/" + id, config());
@@ -89,7 +92,7 @@ export default {
     return await axios.put("api/changeStatus/" + taskId, undefined, config());
   },
   getSpecializationsToCache: async function () {
-    axios
+    await axios
       .get("api/specializations", config())
       .then((response) => {
         const specCache = [];
@@ -97,6 +100,7 @@ export default {
           specCache.push({ id: s.id, name: s.name });
         }
         store.dispatch("cache/setSpecs", specCache);
+        return specCache;
       })
       .catch((e) => console.log(e));
   },

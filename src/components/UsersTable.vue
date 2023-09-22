@@ -25,7 +25,7 @@ import { UserData } from "@/services";
 import api from "../services";
 import AlertBox from "./AlertBox.vue";
 import UserDetails from "./UserDetails.vue";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 
 export default defineComponent({
   data: () => ({
@@ -51,7 +51,7 @@ export default defineComponent({
       this.loading = true;
       api
         .getUsers()
-        .then((response: AxiosResponse) => {
+        .then((response: any) => {
           this.users = response.data;
           this.loading = false;
         })

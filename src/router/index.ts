@@ -76,18 +76,19 @@ const router = new VueRouter({
 router.beforeResolve((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.logged_in) {
-      next({ name: "login", query: { redirect: to.name } });
+      store.dispatch("toast/showToast", {
+        message: "Log in to acces that feature",
+        color: "warning",
+        icon: "mdi-alert",
+      });
+      next({ name: "login" });
       return;
     } else {
       next();
     }
   } else if (to.matched.some((record) => record.meta.onlyLoggedOut)) {
     if (store.state.logged_in) {
-      if (to.query.redirect) {
-        next(to.query.redirect as string);
-      } else {
-        next({ name: "home" });
-      }
+      next({ name: "home" });
     } else {
       next();
     }

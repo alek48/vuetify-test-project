@@ -21,6 +21,7 @@
                     transition="scale-transition"
                     offset-y
                     min-width="auto"
+                    :close-on-content-click="false"
                   >
                     <template v-slot:activator="{ on, attr }">
                       <v-text-field
@@ -127,8 +128,12 @@ export default defineComponent({
   created() {
     api
       .getSpecializationsToCache()
-      .then((this.specsOptions = this.$store.state.cache.specializations));
-    api.getUsers().then((this.usersOptions = this.$store.state.cache.users));
+      .then(
+        () => (this.specsOptions = this.$store.state.cache.specializations)
+      );
+    api
+      .getUsers()
+      .then(() => (this.usersOptions = this.$store.state.cache.users));
   },
   methods: {
     async submitForm() {

@@ -150,7 +150,6 @@ export default defineComponent({
       this.loading = true;
       var task = this.$props.task;
       task.user_id = this.newId;
-      console.log(this.newId);
       await api
         .postUpdatedTask(task)
         .then(() => {

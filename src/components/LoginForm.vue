@@ -136,11 +136,7 @@ export default defineComponent({
               icon: "mdi-login",
             });
             this.$store.dispatch("logIn", response.data.data);
-            if (this.$route.query.redirect) {
-              this.$router.push(this.$route.query.redirect as RawLocation);
-            } else {
-              this.$router.push({ name: "home" });
-            }
+            this.$router.push({ name: "home" });
           })
           .catch((err) => {
             this.loading = false;

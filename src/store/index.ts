@@ -19,13 +19,13 @@ export default new Vuex.Store<State>({
   }),
   getters: {},
   mutations: {
-    LOG_IN(state: State, payload: LoginPayload) {
+    async LOG_IN(state: State, payload: LoginPayload) {
       state.userToken = payload.token;
       state.username = payload.name;
       state.logged_in = true;
       state.userId = payload.id;
     },
-    LOG_OUT(state: State) {
+    async LOG_OUT(state: State) {
       state.userToken = "";
       state.username = "";
       state.userId = -1;
@@ -33,7 +33,7 @@ export default new Vuex.Store<State>({
     },
   },
   actions: {
-    logIn(context: Context, payload: LoginPayload) {
+    async logIn(context: Context, payload: LoginPayload) {
       context.commit("LOG_IN", payload);
       cookie.set("name", payload.name);
       cookie.set("token", payload.token);

@@ -107,7 +107,6 @@
 <script lang="ts">
 import Vue from "vue";
 import cookies from "./services/cookies";
-import api from "./services/index";
 
 export default Vue.extend({
   name: "App",
@@ -123,8 +122,6 @@ export default Vue.extend({
     };
     if (cookieLogin.name && cookieLogin.id && cookieLogin.token) {
       this.$store.dispatch("logIn", cookieLogin);
-      api.getUsers().catch((e) => console.log(e));
-      api.getSpecializationsToCache().catch((e) => console.log(e));
     }
   },
   methods: {
